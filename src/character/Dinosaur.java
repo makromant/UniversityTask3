@@ -9,10 +9,10 @@ import obstacles.Obstacles;
 
 
 public class Dinosaur extends Pane {
-    private int floorPos;
-    private final int DINO_SPEED = 15;
-    private boolean duck;
+    public static final int DINO_SPEED = 5;
     public Point2D velocity;
+    private int floorPos;
+    private boolean duck;
     private Rectangle rect;
 
     public Dinosaur() {
@@ -28,23 +28,15 @@ public class Dinosaur extends Pane {
         for (int i = 0; i < Math.abs(value); i++) {
             for (Obstacles o : Game.obst) {
                 if (this.getBoundsInParent().intersects(o.getBoundsInParent())) {
-                    if (moveUpOrDown) {
-                        setTranslateY(getTranslateY() + 1);//?
-                        return;
-                    }
-                    else{
-                        setTranslateY(getTranslateY() - 1);
-                        return;
-                    }
                 }
             }
             if (duck)
                 floorPos = 155;
             else
                 floorPos = 150;
-            if(getTranslateY() > floorPos)
+            if (getTranslateY() > floorPos)
                 setTranslateY(floorPos);
-            if(getTranslateY() < floorPos - 40)
+            if (getTranslateY() < floorPos - 40)
                 setTranslateY(floorPos - 40);
             this.setTranslateY((getTranslateY() + (moveUpOrDown ? 1 : -1)));
         }
@@ -52,26 +44,28 @@ public class Dinosaur extends Pane {
 
     public void moveX(int value) {
         for (int i = 0; i < value; i++) {
+            Obstacles o = Game.obst.get(Game.counter - 1);
             setTranslateX(getTranslateX() + 1);
-            for (Obstacles o : Game.obst) {
-                if (this.getBoundsInParent().intersects(o.getBoundsInParent())) {
-                    if (getTranslateX() + 10 == o.getTranslateX()) {
-                        setTranslateX(getTranslateX() - 1);
-                        return;
-                    }
-                }
-                if (getTranslateX() == o.getTranslateX()) {
-
-                    Game.score += o.getCount();
+            int dinoX = (int)getTranslateX();
+            int oX = (int)o.getTranslateX();
+            oX -= oX % dinoX;
+            System.out.println("s " + dinoX + " " + oX);
+            if (this.getBoundsInParent().intersects(o.getBoundsInParent()) && dinoX == oX) {
+                    setTranslateX(getTranslateX() - 1);
                     return;
-                }
             }
+            if (oX == 0) {
+                Game.score += o.getCount();
+                return;
+            }
+
         }
     }
 
     public void jump() {
         velocity = new Point2D(DINO_SPEED, -10);
     }
+
     public void duck() {
         duck = true;
         getChildren().remove(rect);

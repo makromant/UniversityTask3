@@ -8,8 +8,8 @@ import obstacles.types.Cactus;
 import java.util.Random;
 
 public class Obstacles extends Pane {
-    Cactus cactus;
-    int count;
+    private Cactus cactus;
+    private int count;
 
     public Obstacles(int score) {
         if (generate(score) == 0) {

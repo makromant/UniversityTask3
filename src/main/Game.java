@@ -4,8 +4,6 @@ package main;
 import character.Dinosaur;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
-import javafx.geometry.Point2D;
-import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -21,16 +19,15 @@ import java.util.ArrayList;
 
 public class Game extends Application {
     public static int score = 0;
-    AnimationTimer timer;
     public static ArrayList<Obstacles> obst = new ArrayList<>();
-    private static Pane end = new Pane();
-    private static boolean endOfGame = false;
+    public static int counter = 0;
     private static Pane appRoot = new Pane();
     private static Pane gameRoot = new Pane();
+    AnimationTimer timer;
     Dinosaur dino = new Dinosaur();
+    private Pane floor = new Pane();
     private Stage prStage;
     private Scene sc;
-    int endX;
     private Label scoreLabel = new Label("Score:" + score);
 
     public static void main(String[] args) {
@@ -39,24 +36,11 @@ public class Game extends Application {
 
     public Parent createContent() {
         gameRoot.setPrefSize(300, 200);
-        Pane floor = new Pane();
-        floor.getChildren().add(new Rectangle(1752500, 10, Color.BLACK));
+        floor.getChildren().add(new Rectangle(1000, 10, Color.BLACK));
         floor.setLayoutX(0);
         floor.setLayoutY(160);
-        endX = 0;
-        for (int i = 0; i < 10; i++) {
-            Obstacles obstacle = new Obstacles(i);
-            obst.add(obstacle);
-            obstacle.setTranslateX(i * 350 + 200);
-            obstacle.setTranslateY(150);
-            gameRoot.getChildren().add(obstacle);
-            endX = i * 350 + 200;
-        }
-        System.out.println(endX);
-        end.getChildren().add(new Rectangle(10, 200, Color.GRAY));
-        end.setLayoutX(endX);
-        end.setLayoutY(0);
-        gameRoot.getChildren().addAll(floor, dino, end);
+        addObstacle(false);
+        gameRoot.getChildren().addAll(floor, dino);
         appRoot.getChildren().addAll(gameRoot, scoreLabel);
         return appRoot;
     }
@@ -70,34 +54,27 @@ public class Game extends Application {
         scoreLabel.setText("Score:" + score);
         dino.translateXProperty().addListener((obs, old, newValue) -> {
             gameRoot.setLayoutX(-dino.getTranslateX() + 50);
-//            if(newValue.intValue() % 6000 == 0) {
-//                Pane floor = new Pane();
-//                floor.getChildren().add(new Rectangle(4000, 10, Color.BLACK));
-//                floor.setLayoutX(dino.getTranslateX() + 900);
-//                floor.setLayoutY(160);
-//                gameRoot.getChildren().add(floor);
-//
-//                for (int i = 0; i < 2; i++) {
-//                    Obstacles obstacle = new Obstacles(score);
-//                    obst.add(obstacle);
-//                    obstacle.setTranslateX(dino.getTranslateX() + 300);
-//                    obstacle.setTranslateY(150);
-//                    gameRoot.getChildren().add(obstacle);
-//                }
-//            }
+            floor.setLayoutX(dino.getTranslateX() - 50);
         });
-        if(dino.getTranslateX() >= endX){
-            Label congrat = new  Label("Cngratulation!\nPress ENTER to leave!");
-            sc.setOnKeyReleased(key -> {
-                if (key.getCode().equals(KeyCode.ENTER)) {
-                    prStage.close();
-                }
-            });
-            congrat.setAlignment(Pos.BASELINE_CENTER);
-            appRoot.getChildren().removeAll();
-            appRoot.getChildren().add(congrat);
-            timer.stop();
+        int dinoX = (int)dino.getTranslateX();
+        int oX = (int)obst.get(counter-1).getTranslateX();
+        oX -= oX % dinoX;
+        if (oX == 0) {
+            addObstacle(true);
         }
+
+//        if(dino.getTranslateX() >= endX){
+//            Label congrat = new  Label("Cngratulation!\nPress ENTER to leave!");
+//            sc.setOnKeyReleased(key -> {
+//                if (key.getCode().equals(KeyCode.ENTER)) {
+//                    prStage.close();
+//                }
+//            });
+//            congrat.setAlignment(Pos.BASELINE_CENTER);
+//            appRoot.getChildren().removeAll();
+//            appRoot.getChildren().add(congrat);
+//            timer.stop();
+//        }
     }
 
     @Override
@@ -132,6 +109,23 @@ public class Game extends Application {
             }
         };
         timer.start();
+    }
+
+    private void addObstacle(boolean value) {
+        if (value) {
+//            obst.remove(0);
+//            System.out.println("del");
+        }
+
+        Obstacles obstacle = new Obstacles(counter);
+        counter++;
+        obst.add(obstacle);
+        double x = counter * 350 + (Math.random() * 50 + 250);
+        System.out.println(dino.getTranslateX() + " " + x);
+        obstacle.setTranslateX(counter * 350 + (Math.random() * 50 + 250));
+        obstacle.setTranslateY(150);
+        gameRoot.getChildren().add(obstacle);
+
     }
 
 }
