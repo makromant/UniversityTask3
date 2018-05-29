@@ -4,10 +4,13 @@ package main;
 import character.Dinosaur;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.geometry.Point2D;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -20,26 +23,47 @@ import java.util.ArrayList;
 public class Game extends Application {
     public static int score = 0;
     public static ArrayList<Obstacles> obst = new ArrayList<>();
-    public static int counter = 0;
-    private static Pane appRoot = new Pane();
+    public static int counter;
+    static AnimationTimer timer;
+    private static Pane appRoot;
     private static Pane gameRoot = new Pane();
-    AnimationTimer timer;
+    private static Stage gameStage = new Stage();
     Dinosaur dino = new Dinosaur();
     private Pane floor = new Pane();
-    private Stage prStage;
-    private Scene sc;
     private Label scoreLabel = new Label("Score:" + score);
 
     public static void main(String[] args) {
         launch(args);
     }
 
+    public void lose() {
+        Stage loseStage = new Stage();
+        loseStage.setResizable(false);
+        HBox loseContent = new HBox();
+        loseContent.setPrefSize(300, 200);
+        loseContent.setAlignment(Pos.CENTER);
+        Label loseLabel = new Label("You lose!\nPress ENTER to exit!");
+        loseContent.getChildren().add(loseLabel);
+        Scene loseScene = new Scene(loseContent);
+        loseScene.setOnKeyPressed(key -> {
+            if (key.getCode().equals(KeyCode.ENTER)) {
+                loseStage.close();
+            }
+        });
+        loseStage.setScene(loseScene);
+        loseStage.setTitle("Chrome dinosaur-like game");
+        timer.stop();
+        gameStage.close();
+        loseStage.show();
+    }
+
     public Parent createContent() {
-        gameRoot.setPrefSize(300, 200);
         floor.getChildren().add(new Rectangle(1000, 10, Color.BLACK));
         floor.setLayoutX(0);
         floor.setLayoutY(160);
-        addObstacle(false);
+        addObstacle();
+        Pane appRoot = new Pane();
+        gameRoot.setPrefSize(300, 200);
         gameRoot.getChildren().addAll(floor, dino);
         appRoot.getChildren().addAll(gameRoot, scoreLabel);
         return appRoot;
@@ -56,32 +80,37 @@ public class Game extends Application {
             gameRoot.setLayoutX(-dino.getTranslateX() + 50);
             floor.setLayoutX(dino.getTranslateX() - 50);
         });
-        int dinoX = (int)dino.getTranslateX();
-        int oX = (int)obst.get(counter-1).getTranslateX();
+        int dinoX = (int) dino.getTranslateX();
+        int oX = (int) obst.get(0).getTranslateX();
         oX -= oX % dinoX;
         if (oX == 0) {
-            addObstacle(true);
+            addObstacle();
         }
-
-//        if(dino.getTranslateX() >= endX){
-//            Label congrat = new  Label("Cngratulation!\nPress ENTER to leave!");
-//            sc.setOnKeyReleased(key -> {
-//                if (key.getCode().equals(KeyCode.ENTER)) {
-//                    prStage.close();
-//                }
-//            });
-//            congrat.setAlignment(Pos.BASELINE_CENTER);
-//            appRoot.getChildren().removeAll();
-//            appRoot.getChildren().add(congrat);
-//            timer.stop();
-//        }
     }
 
     @Override
     public void start(Stage primaryStage) {
-        prStage = primaryStage;
+        HBox startContent = new HBox();
+        startContent.setPrefSize(300, 200);
+        startContent.setAlignment(Pos.CENTER);
+        Label startLabel =
+                new Label("Chrome dinosaur-like game\n\n\nTo start game press ENTER!");
+        startContent.getChildren().add(startLabel);
+        Scene startScene = new Scene(startContent);
+        startScene.setOnKeyPressed(key -> {
+            if (key.getCode().equals(KeyCode.ENTER)) {
+                primaryStage.hide();
+                game();
+            }
+        });
+        primaryStage.setTitle("Chrome dinosaur-like game");
+        primaryStage.setScene(startScene);
+        primaryStage.show();
+    }
+
+    private void game() {
+        counter = 0;
         Scene scene = new Scene(createContent());
-        sc = scene;
         scene.setOnKeyPressed(key -> {
             if (key.getCode().equals(KeyCode.SPACE) ||
                     key.getCode().equals(KeyCode.UP) ||
@@ -99,9 +128,10 @@ public class Game extends Application {
                 dino.normal();
             }
         });
-        primaryStage.setResizable(false);
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        gameStage.setResizable(false);
+        gameStage.setTitle("Chrome dinosaur-like game");
+        gameStage.setScene(scene);
+        gameStage.show();
         timer = new AnimationTimer() {
             @Override
             public void handle(long now) {
@@ -109,23 +139,19 @@ public class Game extends Application {
             }
         };
         timer.start();
+        dino.velocity = new Point2D(Dinosaur.DINO_SPEED, 0);
     }
 
-    private void addObstacle(boolean value) {
-        if (value) {
-//            obst.remove(0);
-//            System.out.println("del");
-        }
-
+    private void addObstacle() {
         Obstacles obstacle = new Obstacles(counter);
         counter++;
         obst.add(obstacle);
         double x = counter * 350 + (Math.random() * 50 + 250);
-        System.out.println(dino.getTranslateX() + " " + x);
         obstacle.setTranslateX(counter * 350 + (Math.random() * 50 + 250));
         obstacle.setTranslateY(150);
         gameRoot.getChildren().add(obstacle);
-
+        if (obst.size() == 2) {
+            obst.remove(0);
+        }
     }
-
 }

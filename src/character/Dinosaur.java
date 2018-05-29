@@ -11,7 +11,6 @@ import obstacles.Obstacles;
 public class Dinosaur extends Pane {
     public static final int DINO_SPEED = 5;
     public Point2D velocity;
-    private int floorPos;
     private boolean duck;
     private Rectangle rect;
 
@@ -26,33 +25,36 @@ public class Dinosaur extends Pane {
     public void moveY(int value) {
         boolean moveUpOrDown = value > 0 ? true : false;
         for (int i = 0; i < Math.abs(value); i++) {
-            for (Obstacles o : Game.obst) {
-                if (this.getBoundsInParent().intersects(o.getBoundsInParent())) {
-                }
+            Obstacles o = Game.obst.get(0);
+            System.out.println(getTranslateY() + " " + o.getTranslateY());
+            if (this.getBoundsInParent().intersects(o.getBoundsInParent()) &&
+                    getTranslateY() == o.getTranslateY()-10){
+                new Game().lose();
+                return;
             }
+            final int FLOOR_POSITION;
             if (duck)
-                floorPos = 155;
+                FLOOR_POSITION = 155;
             else
-                floorPos = 150;
-            if (getTranslateY() > floorPos)
-                setTranslateY(floorPos);
-            if (getTranslateY() < floorPos - 40)
-                setTranslateY(floorPos - 40);
+                FLOOR_POSITION = 150;
+            if (getTranslateY() > FLOOR_POSITION)
+                setTranslateY(FLOOR_POSITION);
+            if (getTranslateY() < FLOOR_POSITION - 40)
+                setTranslateY(FLOOR_POSITION - 40);
             this.setTranslateY((getTranslateY() + (moveUpOrDown ? 1 : -1)));
         }
     }
 
     public void moveX(int value) {
         for (int i = 0; i < value; i++) {
-            Obstacles o = Game.obst.get(Game.counter - 1);
+            Obstacles o = Game.obst.get(0);
             setTranslateX(getTranslateX() + 1);
-            int dinoX = (int)getTranslateX();
-            int oX = (int)o.getTranslateX();
+            int dinoX = (int) getTranslateX();
+            int oX = (int) o.getTranslateX();
             oX -= oX % dinoX;
-            System.out.println("s " + dinoX + " " + oX);
             if (this.getBoundsInParent().intersects(o.getBoundsInParent()) && dinoX == oX) {
-                    setTranslateX(getTranslateX() - 1);
-                    return;
+                new Game().lose();
+                return;
             }
             if (oX == 0) {
                 Game.score += o.getCount();
