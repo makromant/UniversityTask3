@@ -26,7 +26,6 @@ public class Dinosaur extends Pane {
         boolean moveUpOrDown = value > 0 ? true : false;
         for (int i = 0; i < Math.abs(value); i++) {
             Obstacles o = Game.obst.get(0);
-            System.out.println(getTranslateY() + " " + o.getTranslateY());
             if (this.getBoundsInParent().intersects(o.getBoundsInParent()) &&
                     getTranslateY() == o.getTranslateY()-10){
                 new Game().lose();
