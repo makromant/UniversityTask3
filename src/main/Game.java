@@ -9,9 +9,9 @@ import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
@@ -57,8 +57,8 @@ public class Game extends Application {
         loseStage.show();
     }
 
-    public Parent createContent() {
-        floor.getChildren().add(new Rectangle(1000, 10, Color.BLACK));
+    private Parent createContent() {
+        floor.getChildren().add(new Rectangle(1000, 10, Color.rgb(192, 192, 192, 0.4)));
         floor.setLayoutX(0);
         floor.setLayoutY(160);
         addObstacle();
@@ -66,12 +66,20 @@ public class Game extends Application {
         gameRoot.setPrefSize(300, 200);
         gameRoot.getChildren().addAll(floor, dino);
         appRoot.getChildren().addAll(gameRoot, scoreLabel);
+        appRoot.setBackground(
+                new Background(
+                        new BackgroundImage(
+                                new Image("file:resources/background.png", 300, 200, false, true),
+                                BackgroundRepeat.REPEAT,
+                                BackgroundRepeat.NO_REPEAT,
+                                BackgroundPosition.DEFAULT,
+                                BackgroundSize.DEFAULT)));
         return appRoot;
     }
 
     private void update() {
-        if (dino.velocity.getY() < 5)//gravitation
-            dino.velocity = dino.velocity.add(0, 1);
+        if (dino.velocity.getY() < 40)//gravitation
+            dino.velocity = dino.velocity.add(0, 3.5);
 
         dino.moveX((int) dino.velocity.getX());
         dino.moveY((int) dino.velocity.getY());
@@ -146,9 +154,8 @@ public class Game extends Application {
         Obstacles obstacle = new Obstacles(counter);
         counter++;
         obst.add(obstacle);
-        double x = counter * 350 + (Math.random() * 50 + 250);
         obstacle.setTranslateX(counter * 350 + (Math.random() * 50 + 250));
-        obstacle.setTranslateY(150);
+        obstacle.setTranslateY(110);
         gameRoot.getChildren().add(obstacle);
         if (obst.size() == 2) {
             obst.remove(0);

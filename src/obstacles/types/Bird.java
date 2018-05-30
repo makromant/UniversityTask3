@@ -1,18 +1,19 @@
 package obstacles.types;
 
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 public class Bird {
-    private final int HEIGHT = 5;
-    private final int WEIGHT = 10;
-    public Rectangle rect;
+    private final static Image birdImg = new Image("file:resources/bird.gif");
+    private ImageView birdView;
 
     public Bird() {
-        rect = new Rectangle(WEIGHT, HEIGHT, Color.BROWN);
+        birdView = new ImageView(birdImg);
     }
 
-    public Rectangle getRect() {
-        return rect;
+    public ImageView getBirdView() {
+        return birdView;
     }
+
+
 }

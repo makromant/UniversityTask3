@@ -1,46 +1,48 @@
 package character;
 
 import javafx.geometry.Point2D;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import main.Game;
 import obstacles.Obstacles;
 
 
 public class Dinosaur extends Pane {
     public static final int DINO_SPEED = 5;
+    private static Image dinoGif = new Image("file:resources/character.gif");
+    private static ImageView dinoView = new ImageView(dinoGif);
     public Point2D velocity;
     private boolean duck;
-    private Rectangle rect;
 
     public Dinosaur() {
-        rect = new Rectangle(10, 10, Color.AQUAMARINE);
+        dinoView.setFitHeight(50);
+        dinoView.setFitWidth(50);
         velocity = new Point2D(0, 0);
         setTranslateX(50);
-        setTranslateY(150);
-        getChildren().add(rect);
+        setTranslateY(110);
+        getChildren().add(dinoView);
     }
 
     public void moveY(int value) {
-        boolean moveUpOrDown = value > 0 ? true : false;
+        boolean moveUpOrDown = value > 0;
         for (int i = 0; i < Math.abs(value); i++) {
             Obstacles o = Game.obst.get(0);
             if (this.getBoundsInParent().intersects(o.getBoundsInParent()) &&
-                    getTranslateY() == o.getTranslateY()-10){
+                    getTranslateY() == o.getTranslateY() - 10) {
                 new Game().lose();
                 return;
             }
             final int FLOOR_POSITION;
             if (duck)
-                FLOOR_POSITION = 155;
+                FLOOR_POSITION = 135;
             else
-                FLOOR_POSITION = 150;
+                FLOOR_POSITION = 110;
             if (getTranslateY() > FLOOR_POSITION)
                 setTranslateY(FLOOR_POSITION);
-            if (getTranslateY() < FLOOR_POSITION - 40)
-                setTranslateY(FLOOR_POSITION - 40);
-            this.setTranslateY((getTranslateY() + (moveUpOrDown ? 1 : -1)));
+            if (getTranslateY() < FLOOR_POSITION - 100)
+                setTranslateY(FLOOR_POSITION - 100);
+            this.setTranslateY((getTranslateY() + (moveUpOrDown ? 0.4 : -0.4)));
         }
     }
 
@@ -64,20 +66,24 @@ public class Dinosaur extends Pane {
     }
 
     public void jump() {
-        velocity = new Point2D(DINO_SPEED, -10);
+        velocity = new Point2D(DINO_SPEED, -50);// = new Point2D(DINO_SPEED, -100);
     }
 
     public void duck() {
         duck = true;
-        getChildren().remove(rect);
-        rect = new Rectangle(10, 5, Color.GOLD);
-        getChildren().add(rect);
+        getChildren().remove(dinoView);
+        dinoView.setFitWidth(25);
+        dinoView.setFitHeight(25);
+        setTranslateY(135);
+        getChildren().add(dinoView);
     }
 
     public void normal() {
         duck = false;
-        getChildren().remove(rect);
-        rect = new Rectangle(10, 10, Color.AQUAMARINE);
-        getChildren().add(rect);
+        getChildren().remove(dinoView);
+        dinoView.setFitWidth(50);
+        dinoView.setFitHeight(50);
+        setTranslateY(110);
+        getChildren().add(dinoView);
     }
 }

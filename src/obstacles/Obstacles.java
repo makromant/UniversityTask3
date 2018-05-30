@@ -1,7 +1,6 @@
 package obstacles;
 
 import javafx.scene.layout.Pane;
-//import obstacles.types.Bird;
 import obstacles.types.Bird;
 import obstacles.types.Cactus;
 
@@ -15,10 +14,10 @@ public class Obstacles extends Pane {
         if (generate(score) == 0) {
             cactus = new Cactus();
             count = cactus.getCount();
-            getChildren().add(cactus.getRect());
+            getChildren().add(cactus.getCactusView());
         }
         else {
-            getChildren().add(new Bird().getRect());
+            getChildren().add(new Bird().getBirdView());
             count = 1;
         }
     }
