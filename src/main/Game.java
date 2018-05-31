@@ -21,14 +21,15 @@ import java.util.ArrayList;
 
 
 public class Game extends Application {
+    public static final int WINDOW_HEIGHT = 200;
+    private static final int WINDOW_WIDTH = 300;
     public static int score = 0;
     public static ArrayList<Obstacles> obst = new ArrayList<>();
-    public static int counter;
-    static AnimationTimer timer;
-    private static Pane appRoot;
+    private static int counter;
+    private static AnimationTimer timer;
     private static Pane gameRoot = new Pane();
     private static Stage gameStage = new Stage();
-    Dinosaur dino = new Dinosaur();
+    private Dinosaur dino = new Dinosaur();
     private Pane floor = new Pane();
     private Label scoreLabel = new Label("Score:" + score);
 
@@ -40,7 +41,7 @@ public class Game extends Application {
         Stage loseStage = new Stage();
         loseStage.setResizable(false);
         HBox loseContent = new HBox();
-        loseContent.setPrefSize(300, 200);
+        loseContent.setPrefSize(WINDOW_WIDTH,WINDOW_HEIGHT);
         loseContent.setAlignment(Pos.CENTER);
         Label loseLabel = new Label("You lose!\nPress ENTER to exit!");
         loseContent.getChildren().add(loseLabel);
@@ -60,16 +61,16 @@ public class Game extends Application {
     private Parent createContent() {
         floor.getChildren().add(new Rectangle(1000, 10, Color.rgb(192, 192, 192, 0.4)));
         floor.setLayoutX(0);
-        floor.setLayoutY(160);
+        floor.setLayoutY(WINDOW_HEIGHT/2 + Dinosaur.dinoViewHeight());
         addObstacle();
         Pane appRoot = new Pane();
-        gameRoot.setPrefSize(300, 200);
+        gameRoot.setPrefSize(WINDOW_WIDTH, WINDOW_HEIGHT);
         gameRoot.getChildren().addAll(floor, dino);
         appRoot.getChildren().addAll(gameRoot, scoreLabel);
         appRoot.setBackground(
                 new Background(
                         new BackgroundImage(
-                                new Image("file:resources/background.png", 300, 200, false, true),
+                                new Image("file:resources/background.png", WINDOW_WIDTH, WINDOW_HEIGHT, false, true),
                                 BackgroundRepeat.REPEAT,
                                 BackgroundRepeat.NO_REPEAT,
                                 BackgroundPosition.DEFAULT,
@@ -99,7 +100,7 @@ public class Game extends Application {
     @Override
     public void start(Stage primaryStage) {
         HBox startContent = new HBox();
-        startContent.setPrefSize(300, 200);
+        startContent.setPrefSize(WINDOW_WIDTH, WINDOW_HEIGHT);
         startContent.setAlignment(Pos.CENTER);
         Label startLabel =
                 new Label("Chrome dinosaur-like game\n\n\nTo start game press ENTER!");
@@ -155,7 +156,7 @@ public class Game extends Application {
         counter++;
         obst.add(obstacle);
         obstacle.setTranslateX(counter * 350 + (Math.random() * 50 + 250));
-        obstacle.setTranslateY(110);
+        obstacle.setTranslateY(WINDOW_HEIGHT/2);
         gameRoot.getChildren().add(obstacle);
         if (obst.size() == 2) {
             obst.remove(0);
