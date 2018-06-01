@@ -1,6 +1,5 @@
 package main;
 
-
 import character.Dinosaur;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
@@ -18,7 +17,6 @@ import javafx.stage.Stage;
 import obstacles.Obstacles;
 
 import java.util.ArrayList;
-
 
 public class Game extends Application {
     public static final int WINDOW_HEIGHT = 200;
@@ -41,7 +39,7 @@ public class Game extends Application {
         Stage loseStage = new Stage();
         loseStage.setResizable(false);
         HBox loseContent = new HBox();
-        loseContent.setPrefSize(WINDOW_WIDTH,WINDOW_HEIGHT);
+        loseContent.setPrefSize(WINDOW_WIDTH, WINDOW_HEIGHT);
         loseContent.setAlignment(Pos.CENTER);
         Label loseLabel = new Label("You lose!\nPress ENTER to exit!");
         loseContent.getChildren().add(loseLabel);
@@ -59,9 +57,10 @@ public class Game extends Application {
     }
 
     private Parent createContent() {
-        floor.getChildren().add(new Rectangle(1000, 10, Color.rgb(192, 192, 192, 0.4)));
+        floor.getChildren().add(
+                new Rectangle(1000, 10, Color.rgb(192, 192, 192, 0.4)));
         floor.setLayoutX(0);
-        floor.setLayoutY(WINDOW_HEIGHT/2 + Dinosaur.dinoViewHeight());
+        floor.setLayoutY(WINDOW_HEIGHT / 2 + Dinosaur.dinoViewHeight());
         addObstacle();
         Pane appRoot = new Pane();
         gameRoot.setPrefSize(WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -70,7 +69,8 @@ public class Game extends Application {
         appRoot.setBackground(
                 new Background(
                         new BackgroundImage(
-                                new Image("file:resources/background.png", WINDOW_WIDTH, WINDOW_HEIGHT, false, true),
+                                new Image("background.png",
+                                        WINDOW_WIDTH, WINDOW_HEIGHT, false, true),
                                 BackgroundRepeat.REPEAT,
                                 BackgroundRepeat.NO_REPEAT,
                                 BackgroundPosition.DEFAULT,
@@ -81,7 +81,6 @@ public class Game extends Application {
     private void update() {
         if (dino.velocity.getY() < 40)//gravitation
             dino.velocity = dino.velocity.add(0, 3.5);
-
         dino.moveX((int) dino.velocity.getX());
         dino.moveY((int) dino.velocity.getY());
         scoreLabel.setText("Score:" + score);
@@ -156,7 +155,7 @@ public class Game extends Application {
         counter++;
         obst.add(obstacle);
         obstacle.setTranslateX(counter * 350 + (Math.random() * 50 + 250));
-        obstacle.setTranslateY(WINDOW_HEIGHT/2);
+        obstacle.setTranslateY(WINDOW_HEIGHT / 2);
         gameRoot.getChildren().add(obstacle);
         if (obst.size() == 2) {
             obst.remove(0);

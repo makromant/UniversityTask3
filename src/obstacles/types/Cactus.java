@@ -6,7 +6,7 @@ import javafx.scene.image.ImageView;
 public class Cactus {
     private final static int CACTUS_COUNT_MAX = 3;
     private final static int CACTUS_COUNT_MIN = 1;
-    private final static Image cactusImg = new Image("file:resources/cactus.gif");
+    private final static Image cactusImg = new Image("cactus.gif");
     private ImageView cactusView;
     private int count;
 

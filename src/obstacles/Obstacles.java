@@ -15,20 +15,20 @@ public class Obstacles extends Pane {
             cactus = new Cactus();
             count = cactus.getCount();
             getChildren().add(cactus.getCactusView());
-        }
-        else {
+        } else {
             getChildren().add(new Bird().getBirdView());
             count = 1;
         }
     }
-    public int getCount(){
+
+    public int getCount() {
         return count;
     }
 
     private int generate(int score) {
         if (score < 10)
             return 0;
-        else{
+        else {
             return new Random().nextInt(2);
         }
     }

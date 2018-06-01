@@ -7,10 +7,9 @@ import javafx.scene.layout.Pane;
 import main.Game;
 import obstacles.Obstacles;
 
-
 public class Dinosaur extends Pane {
     public static final int DINO_SPEED = 5;
-    private static Image dinoGif = new Image("file:resources/character.gif");
+    private static Image dinoGif = new Image("character.gif");
     private static ImageView dinoView = new ImageView(dinoGif);
     public Point2D velocity;
     private boolean duck;
@@ -23,9 +22,11 @@ public class Dinosaur extends Pane {
         setTranslateY(110);
         getChildren().add(dinoView);
     }
-    public static int dinoViewHeight(){
-        return (int)dinoView.getFitHeight();
+
+    public static int dinoViewHeight() {
+        return (int) dinoView.getFitHeight();
     }
+
     public void moveY(int value) {
         boolean moveUpOrDown = value > 0;
         for (int i = 0; i < Math.abs(value); i++) {
@@ -37,9 +38,9 @@ public class Dinosaur extends Pane {
             }
             final int FLOOR_POSITION;
             if (duck)
-                FLOOR_POSITION = (int) (Game.WINDOW_HEIGHT/2 + dinoView.getFitHeight());
+                FLOOR_POSITION = (int) (Game.WINDOW_HEIGHT / 2 + dinoView.getFitHeight());
             else
-                FLOOR_POSITION = Game.WINDOW_HEIGHT/2;
+                FLOOR_POSITION = Game.WINDOW_HEIGHT / 2;
             if (getTranslateY() > FLOOR_POSITION)
                 setTranslateY(FLOOR_POSITION);
             if (getTranslateY() < FLOOR_POSITION - 100)
@@ -68,7 +69,7 @@ public class Dinosaur extends Pane {
     }
 
     public void jump() {
-        velocity = new Point2D(DINO_SPEED, -50);// = new Point2D(DINO_SPEED, -100);
+        velocity = new Point2D(DINO_SPEED, -50);
     }
 
     public void duck() {
@@ -76,7 +77,7 @@ public class Dinosaur extends Pane {
         getChildren().remove(dinoView);
         dinoView.setFitWidth(25);
         dinoView.setFitHeight(25);
-        setTranslateY((int) (Game.WINDOW_HEIGHT/2 + dinoView.getFitHeight()*2));
+        setTranslateY((int) (Game.WINDOW_HEIGHT / 2 + dinoView.getFitHeight() * 2));
         getChildren().add(dinoView);
     }
 
@@ -85,7 +86,7 @@ public class Dinosaur extends Pane {
         getChildren().remove(dinoView);
         dinoView.setFitWidth(50);
         dinoView.setFitHeight(50);
-        setTranslateY(Game.WINDOW_HEIGHT/2);
+        setTranslateY(Game.WINDOW_HEIGHT / 2);
         getChildren().add(dinoView);
     }
 }

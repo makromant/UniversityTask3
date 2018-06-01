@@ -4,7 +4,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 public class Bird {
-    private final static Image birdImg = new Image("file:resources/bird.gif");
+    private final static Image birdImg = new Image("bird.gif");
     private ImageView birdView;
 
     public Bird() {
@@ -14,6 +14,4 @@ public class Bird {
     public ImageView getBirdView() {
         return birdView;
     }
-
-
 }
