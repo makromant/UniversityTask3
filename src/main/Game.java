@@ -20,7 +20,7 @@ import java.util.ArrayList;
 
 public class Game extends Application {
     public static final int WINDOW_HEIGHT = 200;
-    private static final int WINDOW_WIDTH = 300;
+    public static final int WINDOW_WIDTH = 300;
     public static int score = 0;
     public static ArrayList<Obstacles> obst = new ArrayList<>();
     private static int counter;
@@ -63,6 +63,7 @@ public class Game extends Application {
         floor.setLayoutY(WINDOW_HEIGHT / 2 + Dinosaur.dinoViewHeight());
         addObstacle();
         Pane appRoot = new Pane();
+        scoreLabel.setTextFill(Color.web("#ffffff"));
         gameRoot.setPrefSize(WINDOW_WIDTH, WINDOW_HEIGHT);
         gameRoot.getChildren().addAll(floor, dino);
         appRoot.getChildren().addAll(gameRoot, scoreLabel);
@@ -107,7 +108,7 @@ public class Game extends Application {
         Scene startScene = new Scene(startContent);
         startScene.setOnKeyPressed(key -> {
             if (key.getCode().equals(KeyCode.ENTER)) {
-                primaryStage.hide();
+                primaryStage.close();
                 game();
             }
         });
