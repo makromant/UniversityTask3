@@ -3,7 +3,7 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>main</groupId>
-    <artifactId>chrome-dinosaur</artifactId>
+    <artifactId>UnivetsityTask3</artifactId>
     <version>2.0</version>
     <packaging>jar</packaging>
     <build>
@@ -12,7 +12,7 @@
                 <directory>resources</directory>
             </resource>
         </resources>
-        <directory>out/production/chrome-dinosaur</directory>
+        <directory>out/production/UnivetsityTask3</directory>
         <sourceDirectory>src</sourceDirectory>
         <testSourceDirectory>test</testSourceDirectory>
         <plugins>

@@ -8,7 +8,7 @@ import main.Game;
 import obstacles.Obstacles;
 
 public class Dinosaur extends Pane {
-    public static final int DINO_SPEED = 5;
+    public static int DINO_SPEED = 5;
     private static Image dinoGif = new Image("character.gif");
     private static ImageView dinoView = new ImageView(dinoGif);
     public Point2D velocity;

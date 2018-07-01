@@ -7,20 +7,21 @@ import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import javafx.util.converter.IntegerStringConverter;
 import obstacles.Obstacles;
 
 import java.util.ArrayList;
 
 public class Game extends Application {
-    public static final int WINDOW_HEIGHT = 200;
-    public static final int WINDOW_WIDTH = 300;
+    public static int WINDOW_HEIGHT;
+    public static int WINDOW_WIDTH;
     public static int score = 0;
     public static ArrayList<Obstacles> obst = new ArrayList<>();
     private static int counter;
@@ -41,7 +42,7 @@ public class Game extends Application {
         HBox loseContent = new HBox();
         loseContent.setPrefSize(WINDOW_WIDTH, WINDOW_HEIGHT);
         loseContent.setAlignment(Pos.CENTER);
-        Label loseLabel = new Label("You lose!\nPress ENTER to exit!");
+        Label loseLabel = new Label("You lose!\nScore: " + score + "\nPress ENTER to exit!");
         loseContent.getChildren().add(loseLabel);
         Scene loseScene = new Scene(loseContent);
         loseScene.setOnKeyPressed(key -> {
@@ -58,12 +59,11 @@ public class Game extends Application {
 
     private Parent createContent() {
         floor.getChildren().add(
-                new Rectangle(1000, 10, Color.rgb(192, 192, 192, 0.4)));
+                new Rectangle(WINDOW_WIDTH, 10, Color.rgb(192, 192, 192, 0.4)));
         floor.setLayoutX(0);
         floor.setLayoutY(WINDOW_HEIGHT / 2 + Dinosaur.dinoViewHeight());
         addObstacle();
         Pane appRoot = new Pane();
-        scoreLabel.setTextFill(Color.web("#ffffff"));
         gameRoot.setPrefSize(WINDOW_WIDTH, WINDOW_HEIGHT);
         gameRoot.getChildren().addAll(floor, dino);
         appRoot.getChildren().addAll(gameRoot, scoreLabel);
@@ -99,25 +99,63 @@ public class Game extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        HBox startContent = new HBox();
-        startContent.setPrefSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-        startContent.setAlignment(Pos.CENTER);
-        Label startLabel =
-                new Label("Chrome dinosaur-like game\n\n\nTo start game press ENTER!");
-        startContent.getChildren().add(startLabel);
-        Scene startScene = new Scene(startContent);
-        startScene.setOnKeyPressed(key -> {
-            if (key.getCode().equals(KeyCode.ENTER)) {
+        VBox root = new VBox();
+        VBox fields = new VBox();
+        root.setPrefSize(300, 200);
+        Label labelRes = new Label("Choose resolution");
+        Label labelSpeed = new Label("Choose speed");
+        TextField widthTF = new TextField();
+        widthTF.setTextFormatter(new TextFormatter<>(new IntegerStringConverter()));
+        widthTF.setPromptText("Width");
+        TextField heigthTF = new TextField();
+        heigthTF.setTextFormatter(new TextFormatter<>(new IntegerStringConverter()));
+        heigthTF.setPromptText("Height");
+        ChoiceBox speedBox = new ChoiceBox();
+        for (int i = 5; i < 11; i++) {
+            switch (i) {
+                case 5:
+                    speedBox.getItems().add(Integer.toString(i) + " Easy");
+                    break;
+                case 7:
+                    speedBox.getItems().add(Integer.toString(i) + " Normal");
+                    break;
+                case 8:
+                    speedBox.getItems().add(Integer.toString(i) + " Hard");
+                    break;
+                case 10:
+                    speedBox.getItems().add(Integer.toString(i) + " Impossible!!!");
+                    break;
+                default:
+                    speedBox.getItems().add(Integer.toString(i));
+            }
+        }
+        speedBox.setValue(speedBox.getItems().get(0));
+        fields.setMaxWidth(200);
+        fields.getChildren().addAll(widthTF, heigthTF, labelSpeed, speedBox);
+        Button btn = new Button("Done");
+        root.getChildren().addAll(labelRes, fields, btn);
+        root.setAlignment(Pos.CENTER);
+        btn.setOnAction(e -> {
+            ArrayList values = new ArrayList();
+            values.add(widthTF.getText());
+            values.add(heigthTF.getText());
+            values.add(speedBox.getSelectionModel().getSelectedItem().toString());
+            if (!values.get(0).equals("") && !values.get(1).equals("")) {
+                WINDOW_WIDTH = Integer.parseInt(values.get(0).toString());
+                WINDOW_HEIGHT = Integer.parseInt(values.get(1).toString());
+                Dinosaur.DINO_SPEED = Integer.parseInt(values.get(2).toString().substring(0, 1));
                 primaryStage.close();
                 game();
             }
         });
+        Scene scene = new Scene(root);
         primaryStage.setTitle("Chrome dinosaur-like game");
-        primaryStage.setScene(startScene);
+        primaryStage.setScene(scene);
         primaryStage.show();
     }
 
     private void game() {
+        dino.setTranslateY(Game.WINDOW_HEIGHT - 60);
         counter = 0;
         Scene scene = new Scene(createContent());
         scene.setOnKeyPressed(key -> {
@@ -155,7 +193,7 @@ public class Game extends Application {
         Obstacles obstacle = new Obstacles(counter);
         counter++;
         obst.add(obstacle);
-        obstacle.setTranslateX(counter * 350 + (Math.random() * 50 + 250));
+        obstacle.setTranslateX(counter * WINDOW_WIDTH + (Math.random() * 50 + 250));
         obstacle.setTranslateY(WINDOW_HEIGHT / 2);
         gameRoot.getChildren().add(obstacle);
         if (obst.size() == 2) {
