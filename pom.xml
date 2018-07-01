@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>main</groupId>
     <artifactId>UnivetsityTask3</artifactId>
-    <version>2.0</version>
+    <version>2.1</version>
     <packaging>jar</packaging>
     <build>
         <resources>
@@ -12,9 +12,8 @@
                 <directory>resources</directory>
             </resource>
         </resources>
-        <directory>out/production/UnivetsityTask3</directory>
+        <directory>target</directory>
         <sourceDirectory>src</sourceDirectory>
-        <testSourceDirectory>test</testSourceDirectory>
         <plugins>
             <!-- Maven JAR Plugin -->
             <plugin>
@@ -30,18 +29,7 @@
                 </configuration>
             </plugin>
         </plugins>
-
     </build>
-
-    <dependencies>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.8.2</version>
-            <scope>test</scope>
-        </dependency>
-
-    </dependencies>
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
