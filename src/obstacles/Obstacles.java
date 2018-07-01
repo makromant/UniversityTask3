@@ -7,17 +7,15 @@ import obstacles.types.Cactus;
 import java.util.Random;
 
 public class Obstacles extends Pane {
-    private Cactus cactus;
     private int count;
 
     public Obstacles(int score) {
         if (generate(score) == 0) {
-            cactus = new Cactus();
-            count = cactus.getCount();
-            getChildren().add(cactus.getCactusView());
+            count = 1;
+            getChildren().add(new Cactus().getCactusView());
         } else {
             getChildren().add(new Bird().getBirdView());
-            count = 1;
+            count = 3;
         }
     }
 

@@ -27,6 +27,7 @@ public class Game extends Application {
     private static int counter;
     private static AnimationTimer timer;
     private static Pane gameRoot = new Pane();
+    private static Pane appRoot = new Pane();
     private static Stage gameStage = new Stage();
     private Dinosaur dino = new Dinosaur();
     private Pane floor = new Pane();
@@ -42,12 +43,19 @@ public class Game extends Application {
         HBox loseContent = new HBox();
         loseContent.setPrefSize(WINDOW_WIDTH, WINDOW_HEIGHT);
         loseContent.setAlignment(Pos.CENTER);
-        Label loseLabel = new Label("You lose!\nScore: " + score + "\nPress ENTER to exit!");
+        Label loseLabel = new Label("You lose!\nScore: " + score + "\nPress ENTER to restart!");
         loseContent.getChildren().add(loseLabel);
         Scene loseScene = new Scene(loseContent);
         loseScene.setOnKeyPressed(key -> {
             if (key.getCode().equals(KeyCode.ENTER)) {
+                score = 0;
+                gameRoot.getChildren().removeAll(floor, dino);
+                appRoot.getChildren().removeAll(gameRoot, scoreLabel);
+                gameRoot = new Pane();
+                appRoot = new Pane();
+                dino = new Dinosaur();
                 loseStage.close();
+                game();
             }
         });
         loseStage.setScene(loseScene);
@@ -63,7 +71,7 @@ public class Game extends Application {
         floor.setLayoutX(0);
         floor.setLayoutY(WINDOW_HEIGHT / 2 + Dinosaur.dinoViewHeight());
         addObstacle();
-        Pane appRoot = new Pane();
+        scoreLabel.setTextFill(Color.web("#ffffff"));
         gameRoot.setPrefSize(WINDOW_WIDTH, WINDOW_HEIGHT);
         gameRoot.getChildren().addAll(floor, dino);
         appRoot.getChildren().addAll(gameRoot, scoreLabel);
@@ -159,17 +167,17 @@ public class Game extends Application {
         counter = 0;
         Scene scene = new Scene(createContent());
         scene.setOnKeyPressed(key -> {
-            if (key.getCode().equals(KeyCode.SPACE) ||
-                    key.getCode().equals(KeyCode.UP) ||
-                    key.getCode().equals(KeyCode.W)) {
-                dino.jump();
-            }
             if (key.getCode().equals(KeyCode.DOWN) ||
                     key.getCode().equals(KeyCode.S)) {
                 dino.duck();
             }
         });
         scene.setOnKeyReleased(key -> {
+            if (key.getCode().equals(KeyCode.SPACE) ||
+                    key.getCode().equals(KeyCode.UP) ||
+                    key.getCode().equals(KeyCode.W)) {
+                dino.jump();
+            }
             if (key.getCode().equals(KeyCode.DOWN) ||
                     key.getCode().equals(KeyCode.S)) {
                 dino.normal();
