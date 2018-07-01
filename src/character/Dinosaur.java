@@ -8,7 +8,7 @@ import main.Game;
 import obstacles.Obstacles;
 
 public class Dinosaur extends Pane {
-    public static int DINO_SPEED = 5;
+    public static int DINO_SPEED;
     private static Image dinoGif = new Image("character.gif");
     private static ImageView dinoView = new ImageView(dinoGif);
     public Point2D velocity;
@@ -19,7 +19,6 @@ public class Dinosaur extends Pane {
         dinoView.setFitWidth(50);
         velocity = new Point2D(0, 0);
         setTranslateX(50);
-        setTranslateY(110);
         getChildren().add(dinoView);
     }
 

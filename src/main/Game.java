@@ -119,7 +119,7 @@ public class Game extends Application {
         heigthTF.setTextFormatter(new TextFormatter<>(new IntegerStringConverter()));
         heigthTF.setPromptText("Height");
         ChoiceBox speedBox = new ChoiceBox();
-        for (int i = 5; i < 11; i++) {
+        for (int i = 5; i < 10; i++) {
             switch (i) {
                 case 5:
                     speedBox.getItems().add(Integer.toString(i) + " Easy");
@@ -127,11 +127,8 @@ public class Game extends Application {
                 case 7:
                     speedBox.getItems().add(Integer.toString(i) + " Normal");
                     break;
-                case 8:
+                case 9:
                     speedBox.getItems().add(Integer.toString(i) + " Hard");
-                    break;
-                case 10:
-                    speedBox.getItems().add(Integer.toString(i) + " Impossible!!!");
                     break;
                 default:
                     speedBox.getItems().add(Integer.toString(i));
