@@ -145,7 +145,10 @@ public class Game extends Application {
             values.add(widthTF.getText());
             values.add(heigthTF.getText());
             values.add(speedBox.getSelectionModel().getSelectedItem().toString());
-            if (!values.get(0).equals("") && !values.get(1).equals("")) {
+            if ((!values.get(0).equals("")
+                    && !values.get(1).equals("")) &&
+                    Integer.parseInt(values.get(0).toString()) >= 300
+                            && Integer.parseInt(values.get(1).toString()) >= 200) {
                 WINDOW_WIDTH = Integer.parseInt(values.get(0).toString());
                 WINDOW_HEIGHT = Integer.parseInt(values.get(1).toString());
                 Dinosaur.DINO_SPEED = Integer.parseInt(values.get(2).toString().substring(0, 1));
