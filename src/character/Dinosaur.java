@@ -37,7 +37,7 @@ public class Dinosaur extends Pane {
             }
             final int FLOOR_POSITION;
             if (duck)
-                FLOOR_POSITION = (int) (Game.WINDOW_HEIGHT / 2 + dinoView.getFitHeight());
+                FLOOR_POSITION = Game.WINDOW_HEIGHT / 2 + dinoViewHeight();
             else
                 FLOOR_POSITION = Game.WINDOW_HEIGHT / 2;
             if (getTranslateY() > FLOOR_POSITION)
@@ -68,7 +68,9 @@ public class Dinosaur extends Pane {
     }
 
     public void jump() {
-        velocity = new Point2D(DINO_SPEED, -50);
+        if (getTranslateY() >= Game.WINDOW_HEIGHT / 2)
+            velocity = new Point2D(DINO_SPEED, -50);
+
     }
 
     public void duck() {
@@ -76,7 +78,6 @@ public class Dinosaur extends Pane {
         getChildren().remove(dinoView);
         dinoView.setFitWidth(25);
         dinoView.setFitHeight(25);
-        setTranslateY((int) (Game.WINDOW_HEIGHT / 2 + dinoView.getFitHeight() * 2));
         getChildren().add(dinoView);
     }
 
